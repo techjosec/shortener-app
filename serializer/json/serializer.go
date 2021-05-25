@@ -27,3 +27,11 @@ func (r *Redirect) Encode(input *shortener.Redirect) ([]byte, error) {
 	}
 	return rawMsg, nil
 }
+
+func (r *Redirect) EncodeArray(input *[]shortener.Redirect) ([]byte, error) {
+	rawMsg, err := json.Marshal(input)
+	if err != nil {
+		return nil, errors.Wrap(err, "serializer.Redirect.json.Encode")
+	}
+	return rawMsg, nil
+}

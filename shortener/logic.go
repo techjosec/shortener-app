@@ -28,6 +28,10 @@ func (rs *redirectService) Find(code string) (*Redirect, error) {
 	return rs.redirectRepository.Find(code)
 }
 
+func (rs *redirectService) ListAll() (*[]Redirect, error) {
+	return rs.redirectRepository.ListAll()
+}
+
 func (rs *redirectService) Store(redirect *Redirect) error {
 	if err := validate.Validate(redirect); err != nil {
 		return errs.Wrap(ErrRedirectInvalid, "service.Redirect.Store")

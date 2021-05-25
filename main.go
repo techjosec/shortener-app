@@ -36,8 +36,9 @@ func main() {
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
 
+	router.Get("/api/redirect", handler.GetAll)
 	router.Get("/api/redirect/{code}", handler.Get)
-	router.Post("/api/redirect/", handler.Post)
+	router.Post("/api/redirect", handler.Post)
 
 	errors := make(chan error, 2)
 	go func() {

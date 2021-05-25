@@ -15,6 +15,8 @@ import (
 
 type RedirectHandler interface {
 	Get(http.ResponseWriter, *http.Request)
+	GetAll(http.ResponseWriter, *http.Request)
+
 	Post(http.ResponseWriter, *http.Request)
 }
 
@@ -61,6 +63,37 @@ func (h *handler) Get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, redirect.URL, http.StatusMovedPermanently)
+}
+
+func (h *handler) GetAll(w http.ResponseWriter, r *http.Request) {
+
+	redirects, err := h.redirectService.ListAll()
+	if err != nil {
+
+		if errors.Cause(err) == shortener.ErrRedirectNotFound {
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+			return
+		}
+
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	contentType := "application/json"
+	responseBody, err := h.serializer(contentType).EncodeArray(redirects)
+
+	if err != nil {
+
+		if errors.Cause(err) == shortener.ErrRedirectNotFound {
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+			return
+		}
+
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	setupResponse(w, contentType, responseBody, http.StatusOK)
+
 }
 
 func (h *handler) Post(w http.ResponseWriter, r *http.Request) {
