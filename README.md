@@ -1,17 +1,25 @@
 # Shortener Web APP
 
-### This APP is a shortnener and redirection tool. 
+### This is a shortnener and redirection tool built in Go Lang.
 
 -----------
 
 ### CONFIG
 
-- Add the following **.env** file in the root app path with the values:
+> Add the following **.env** file in the root app path with the values:
+> ```
+> APP_PORT=8000
+> REDIS_URL=redis://localhost:6379
+> ```
 
-```
-APP_PORT=8000
-REDIS_URL=redis://localhost:6379
-```
+-----------
+
+### RUN
+
+> Run the app executing the following CLI command over the app rootath:
+> ```
+> > go run main.go
+> ```
 
 -----------
 
@@ -19,7 +27,7 @@ REDIS_URL=redis://localhost:6379
 
 - **POST**
 
-> Creates a new redirection sending a JSON object with an **url** property who's the url to be redirected:
+> Creates a new redirection posting a JSON object with an **url** property:
 > ```shell
 > curl --request POST \
 >   --url http://localhost:8000/api/redirect \
