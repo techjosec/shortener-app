@@ -86,6 +86,7 @@ func (rr *redisRepository) ListAll() (*[]shortener.Redirect, error) {
 
 	index := 0
 	iterator := rr.client.Scan(0, "redirect:*", 0).Iterator()
+
 	for iterator.Next() {
 
 		data, err := rr.client.HGetAll(iterator.Val()).Result()
@@ -96,9 +97,7 @@ func (rr *redisRepository) ListAll() (*[]shortener.Redirect, error) {
 			return nil, errors.Wrap(shortener.ErrRedirectNotFound, "repository.Redirect.redis.FindAll")
 		}
 
-		fmt.Printf("- %s \n", iterator.Val())
 		redirect, err := fillRedirect(data)
-
 		if err != nil {
 			return nil, errors.Wrap(err, "repository.Redirect.redis.fillRedirect")
 		}
@@ -109,6 +108,10 @@ func (rr *redisRepository) ListAll() (*[]shortener.Redirect, error) {
 
 	if err := iterator.Err(); err != nil {
 		return nil, errors.Wrap(err, "repository.Redirect.redis.FindAll")
+	}
+
+	if len(redirects) == 0 {
+		return nil, errors.Wrap(shortener.ErrRedirectNotFound, "repository.Redirect.redis.FindAll")
 	}
 
 	return &redirects, nil

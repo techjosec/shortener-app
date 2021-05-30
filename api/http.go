@@ -93,7 +93,6 @@ func (h *handler) GetAll(w http.ResponseWriter, r *http.Request) {
 	}
 
 	setupResponse(w, contentType, responseBody, http.StatusOK)
-
 }
 
 func (h *handler) Post(w http.ResponseWriter, r *http.Request) {
